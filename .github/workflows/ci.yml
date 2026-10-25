@@ -30,8 +30,8 @@ jobs:
             python3 \
             qemu-system-misc
 
-      - name: Build xv6 kernel
-        run: make -C src
+      - name: Build xv6 and filesystem image
+        run: make -C src fs.img
 
       - name: Run trace and sysinfo grading checks
         working-directory: src
