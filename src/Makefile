@@ -68,6 +68,9 @@ OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 
 CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb
+# GCC 12+ flags the shell's intentional recursive command traversal as an
+# infinite-recursion error. Keep other warnings fatal.
+CFLAGS += -Wno-error=infinite-recursion
 
 ifdef LAB
 LABUPPER = $(shell echo $(LAB) | tr a-z A-Z)
