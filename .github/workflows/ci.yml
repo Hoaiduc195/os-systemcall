@@ -1,0 +1,38 @@
+name: xv6 CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syscall-lab:
+    name: Build and test syscall lab
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install xv6 build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            binutils-riscv64-linux-gnu \
+            build-essential \
+            gcc-riscv64-linux-gnu \
+            python3 \
+            qemu-system-misc
+
+      - name: Build xv6 kernel
+        run: make -C src
+
+      - name: Run trace and sysinfo grading checks
+        working-directory: src
+        run: python3 grade-lab-syscall trace sysinfotest
